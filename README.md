@@ -18,13 +18,7 @@ Para la implementación del sistema de mensajería, es necesario instalar las si
 ## 🔧 Instalación y configuración
 Sigue estos pasos para configurar el proyecto:
 
-1. Clona este repositorio:
-   ```sh
-   git clone <URL_DEL_REPOSITORIO>
-   cd <NOMBRE_DEL_PROYECTO>
-   ```
-
-2. Instala las dependencias necesarias:
+  Instala las dependencias necesarias:
    ```sh
    npm install express cookie-parser morgan
    ```
