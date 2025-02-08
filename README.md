@@ -23,4 +23,4 @@ Sigue estos pasos para configurar el proyecto:
    npm install express cookie-parser morgan
    ```
 
-## Desafio hecho en clases. 🚀
+Desafio hecho en clases. 🚀
