@@ -1,66 +1,46 @@
+import cors from "cors";
 import cookieParser from "cookie-parser";
-import type { NextFunction, Request, Response } from "express";
 import express from "express";
 import morgan from "morgan";
+import http from "node:http";
+import { Server } from "socket.io";
 import { globalMiddleware } from "./middlewares/global.middleware";
 import routerUser from "./routes/user.route";
 
 const app = express();
-
-app.listen(3000, () => {
-    console.log("Server is running on http://localhost:3000");
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: "*", // permitir todas las conexiones
+    },
 });
+
+
 
 // 1 y 2 Configuración de los middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
+app.use(cors());
 
-// 3. Middleware de nivel de aplicación
-app.use(globalMiddleware);
+// static files
+app.use(express.static("public"));
 
-app.get("/", (req, res) => {
-    res.send("Hello World");
+
+server.listen(3000, () => {
+    console.log("Server is running on http://localhost:3000");
 });
 
-// 5. Declaración de las rutas
-app.use("/api", routerUser);
+const chat = io.of("/chat");
 
-// interface Message {
-//   id: number;
-//   message: string;
-//   data: Date;7
-// }
+chat.on("connection", (socket) => {
+    console.log("New connection", socket.id);
 
-// 7. Denir endpoints para enviar y recibir mensajes.
-const messages: string[] = [];
+    // rooms
+    socket.on("joinRoom", (room) => {
+        socket.join(room);
+        console.log(`User joined room ${room}`);
+    });
 
-app.post("/message", (req, res) => {
-    const { message } = req.body;
-    messages.push(message);
-    res.send("Message added");
 });
 
-app.get("/message", (req, res) => {
-    try {
-        const message = messages.shift();
-        if (message) {
-            return void res.send(message);
-        }
-        return void res.status(204).send("No content");
-    } catch (error) {
-        return void res.status(500).send("Internal server error");
-    }
-    res.status(204).send("No content");
-});
-
-// 4 y 8. Probar el middleware de errores
-app.get("/error", (req, res) => {
-    throw new Error("Error de ejemplo");
-});
-
-// 4 y 8. Middleware de errores
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    console.log(err.message);
-    res.status(500).send("Something broke!");
-});
