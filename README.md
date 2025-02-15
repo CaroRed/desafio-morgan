@@ -1,4 +1,4 @@
-# 📌 Desafío - Implementación de un Middleware en entorno JavaScript
+# 📌 Hito 6 - Implementación de un Middleware en entorno JavaScript
 
 ## 📖 Descripción
 Este proyecto consiste en la implementación de un sistema de mensajería utilizando **Node.js** y **Express**, donde se hará uso de middleware para mejorar la gestión de solicitudes HTTP.
